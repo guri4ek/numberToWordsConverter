@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Digits to words converter</title>
+        <script src="converter.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <input id="number" type="text" />
+        <button onclick="go()">Convert</button>
+        <p id="text"></p>
+        <script type="text/javascript">
+            function go() {
+                document.getElementById('text').innerHTML = numberToWordsConverter.convert(document.getElementById('number').value);
+            }
+        </script>
+    </body>
+</html>
