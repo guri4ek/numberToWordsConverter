@@ -5,6 +5,7 @@ let numberToWordsConverter = {
 
         this.number = this._convertToStringFormat(number);
 
+        this._addMillions();
         this._addThousands();
         this._addHundreds(this.number);
         this._addSecondTen(this.number);
@@ -21,21 +22,21 @@ let numberToWordsConverter = {
 
     _addMillions()
     {
-        if(this.number < 1000) {
+        if(this.number < 1000000) {
             return ;
         }
 
-        const getThousands = (n) => {
-          return Math.floor(n/1000) % 1000;
+        const getMillions = (n) => {
+          return Math.floor(n/1000000) % 1000000;
         }
 
-        let thousands = this._convertToStringFormat(getThousands(this.number));
+        let millions = this._convertToStringFormat(getMillions(this.number));
 
-        this._addHundreds(thousands);
-        this._addSecondTen(thousands);
-        this._addTens(thousands);
-        this._addOnes(thousands);
-        this._addThousandWord(thousands);
+        this._addHundreds(millions);
+        this._addSecondTen(millions);
+        this._addTens(millions);
+        this._addOnes(millions);
+        this._addMillionWord(millions);
     },
 
     _addThousands()
@@ -131,6 +132,23 @@ let numberToWordsConverter = {
             this.finalWords += ' тисячі';
         } else {
             this.finalWords += ' тисяч';
+        }
+    },
+
+    _addMillionWord(millions) {
+        let changeEnding = millions < 9 || millions >= 20;
+
+        if (millions[millions.length-1] == '1' && changeEnding) {
+            this.finalWords += ' мільйон';
+        } else if (
+            (millions[millions.length-1] == '2' ||
+            millions[millions.length-1] == '3' ||
+            millions[millions.length-1] == '4') &&
+            changeEnding
+        ) {
+            this.finalWords += ' мільйони';
+        } else {
+            this.finalWords += ' мільйонів';
         }
     },
 
