@@ -3,21 +3,45 @@ let numberToWordsConverter = {
     convert(number) {
         this.finalWords = '';
 
-        this.number = this._convertToStringFormat(number);
+        this._setDecimalNFloatParts(number);
 
         this._addMillions();
         this._addThousands();
+
         this._addHundreds(this.number);
         this._addSecondTen(this.number);
         this._addTens(this.number);
         this._addOnes(this.number);
+
         this._addCurrency();
+
+        this._addCents();
 
         return this.finalWords.trim();
     },
 
+    _setDecimalNFloatParts(number) {
+        let stringNumber = this._convertToStringFormat(number);
+        this.number = stringNumber.split('.')[0];
+
+        if (typeof stringNumber.split('.')[1] != undefined) {
+            this.floatPart = stringNumber.split('.')[1];
+            if (this.floatPart.length == 1) {
+                this.floatPart = String(this.floatPart * 10);
+            }
+        }
+    },
+
     _convertToStringFormat(number) {
-        return String(number);
+        return String(Math.round(parseFloat(String(number).replace(/,/g, '.')) * 100 ) / 100);
+    },
+
+    _addCents()
+    {
+        this._addSecondTen(this.floatPart);
+        this._addTens(this.floatPart);
+        this._addOnes(this.floatPart);
+        this._addCentsnWord(this.floatPart);
     },
 
     _addMillions()
@@ -71,7 +95,7 @@ let numberToWordsConverter = {
     _addSecondTen(number) {
         let words = '';
 
-        if (number >= 10 && this.number < 20) {
+        if (number >= 10 && number < 20) {
             words = this.secondTen[number[number.length-1]];
         }
 
@@ -152,9 +176,27 @@ let numberToWordsConverter = {
         }
     },
 
+    _addCentsnWord(cents) {
+        let changeEnding = cents < 9 || cents >= 20;
+
+        if (cents[cents.length-1] == '1' && changeEnding) {
+            this.finalWords += ' копійка';
+        } else if (
+            (cents[cents.length-1] == '2' ||
+            cents[cents.length-1] == '3' ||
+            cents[cents.length-1] == '4') &&
+            changeEnding
+        ) {
+            this.finalWords += ' копійки';
+        } else {
+            this.finalWords += ' копійок';
+        }
+    },
+
     finalWords : '',
 
-    number : '',
+    number : '0',
+    floatPart : '0',
 
     hundreds : ["", "сто", "двісті", "триста", "чотириста", "п'ятсот", "шістсот", "сімсот", "вісімсот", "дев'ятсот"],
 
