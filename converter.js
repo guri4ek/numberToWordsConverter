@@ -24,11 +24,14 @@ let numberToWordsConverter = {
         let stringNumber = this._convertToStringFormat(number);
         this.number = stringNumber.split('.')[0];
 
-        if (typeof stringNumber.split('.')[1] != undefined) {
+        if (stringNumber.split('.')[1] != undefined) {
             this.floatPart = stringNumber.split('.')[1];
+
             if (this.floatPart.length == 1) {
                 this.floatPart = String(this.floatPart * 10);
             }
+        } else {
+            this.floatPart = '0';
         }
     },
 
@@ -38,10 +41,18 @@ let numberToWordsConverter = {
 
     _addCents()
     {
+        /*
         this._addSecondTen(this.floatPart);
         this._addTens(this.floatPart);
         this._addOnes(this.floatPart);
+        */
+        this._addCentsFloat();
         this._addCentsnWord(this.floatPart);
+    },
+
+    _addCentsFloat()
+    {
+        this.finalWords += ' ' + this.floatPart;
     },
 
     _addMillions()
