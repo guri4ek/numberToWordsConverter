@@ -17,7 +17,7 @@ let numberToWordsConverter = {
 
         this._addCents();
 
-        return this.finalWords.trim();
+        return this.finalWords.replace(/\s+/g, ' ').trim();
     },
 
     _setDecimalNFloatParts(number) {
@@ -52,7 +52,7 @@ let numberToWordsConverter = {
 
     _addCentsFloat()
     {
-        this.finalWords += ' ' + this.floatPart;
+        this.finalWords += ' ' + this.floatPart.padEnd(2, '0');
     },
 
     _addMillions()
